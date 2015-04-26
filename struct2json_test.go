@@ -24,3 +24,27 @@ func TestEncodeBasicObject(t *testing.T) {
 		t.Error("Encoding does not match decoding")
 	}
 }
+
+func TestEncodeBasicArray(t *testing.T) {
+	want := bytes.Join([][]byte{
+		[]byte(`{"myobjects":[`),
+		[]byte(`{"id":1,"title":"My title"},`),
+		[]byte(`{"id":1,"title":"My title"}`),
+		[]byte(`]}`),
+	}, nil)
+
+	obj := []MyObject{
+		MyObject{ID: 1, Title: "My title"},
+		MyObject{ID: 1, Title: "My title"},
+	}
+
+	got, err := Encode(obj)
+	if err != nil {
+		t.Error("Error while encoding object")
+	}
+	if !bytes.Equal(got, want) {
+		t.Logf("got : %v", string(got))
+		t.Logf("want: %v", string(want))
+		t.Error("Encoding does not match decoding")
+	}
+}
